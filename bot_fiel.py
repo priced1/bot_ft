@@ -16,7 +16,7 @@ CONTAS = [
         "auth_file": "auth_beatriz.json",
         "nome_alvo": "BEATRIZ CASADO",
         "id_checkbox": "#id_dependentes_2732160",
-        "setores_desejados": ["norte","sul"]
+        "setores_desejados": ["norte"]
     },
     {
         "id_conta": "JHONATA",
