@@ -16,7 +16,6 @@ CONTAS = [
         "auth_file": "auth_beatriz.json",
         "nome_alvo": "BEATRIZ CASADO",
         "id_checkbox": "#id_dependentes_2732160",
-        "setores_desejados": ["norte","sul"]
     },
     {
         "id_conta": "JHONATA",
@@ -25,8 +24,7 @@ CONTAS = [
         "auth_file": "auth_jhonata.json",
         "nome_alvo": "JHONATA SANTANA",
         "id_checkbox": "#id_dependentes_2785123",
-        "setores_desejados": ["norte"]
-    },
+   },
     
 ]
 
@@ -223,7 +221,7 @@ async def rodar_bot(browser,
                     await page.evaluate(
                                             "document.body.style.zoom = '70%'"
                                         )
-                    log(tag,"🎯 Página de setores detectada: {current_url}")
+                    log(tag, f"🎯 Página de setores detectada: {current_url}")
                     
                     
                     
@@ -354,242 +352,6 @@ async def rodar_bot(browser,
 
                     await botao_continuar.click()
                   
-                    log(
-                        tag,
-                        "💳 Aguardando botão 'EFETUAR PAGAMENTO'..."
-                    )
-
-                    botao_pagamento = page.locator(
-                        'a[href*="/pagar/"]:has-text("EFETUAR PAGAMENTO")'
-                    )
-
-                    await botao_pagamento.wait_for(
-                        state="visible",
-                        timeout=15000
-                    )
-
-                    log(
-                        tag,
-                        "💳 Botão 'EFETUAR PAGAMENTO' encontrado."
-                    )
-
-                    await botao_pagamento.click()
-
-                    log(
-                        tag,
-                        "⚡ Entrando na página de pagamento..."
-                    )
-
-                    log(
-                        tag,
-                        "💠 Aguardando opção PIX..."
-                    )
-
-                    try:
-
-                        pix_radio = page.locator(
-                            "#input-pix"
-                        )
-
-                        await pix_radio.wait_for(
-                            state="visible",
-                            timeout=15000
-                        )
-
-                        await pix_radio.check()
-
-                    except Exception:
-
-                        log(
-                            tag,
-                            "⚠️ Tentando selecionar PIX pelo botão..."
-                        )
-
-                        await page.locator(
-                            "#group-pix"
-                        ).click()
-
-                    log(
-                        tag,
-                        "✅ PIX selecionado."
-                    )
-
-                    log(
-                        tag,
-                        "📄 Aceitando termos e condições..."
-                    )
-
-                    termos = page.locator(
-                        "#terms-fiel-torcedor"
-                    )
-
-                    await termos.wait_for(
-                        state="visible",
-                        timeout=10000
-                    )
-
-                    if not await termos.is_checked():
-
-                        await termos.check()
-
-                    log(
-                        tag,
-                        "✅ Termos e condições aceitos."
-                    )
-
-                    botao_pagamento_final = page.locator(
-                        "#submit-btn"
-                    )
-
-                    await botao_pagamento_final.wait_for(
-                        state="visible",
-                        timeout=10000
-                    )
-
-                    log(
-                        tag,
-                        "⏳ Aguardando botão 'Efetuar Pagamento'..."
-                    )
-
-                    await page.wait_for_function(
-                        """
-                        () => {
-                            const botao =
-                                document.querySelector("#submit-btn");
-
-                            return botao && !botao.disabled;
-                        }
-                        """,
-                        timeout=10000
-                    )
-
-                    log(
-                        tag,
-                        "💳 Botão 'Efetuar Pagamento' habilitado."
-                    )
-
-                    await botao_pagamento_final.click()
-
-                    log(
-                        tag,
-                        "⚡ Efetuando pagamento..."
-                    )
-
-                    log(
-                        tag,
-                        "💰 Aguardando página do PIX..."
-                    )
-
-                    try:
-
-                        await page.wait_for_url(
-                            "**/ingressos/*/",
-                            timeout=15000
-                        )
-
-                    except Exception:
-
-                        pass
-
-                    await asyncio.sleep(2)
-
-                    log(
-                        tag,
-                        f"💰 Página atual: {page.url}"
-                    )
-
-                    log(
-                        tag,
-                        "📋 Procurando 'PIX copia e cola'..."
-                    )
-
-                    pix = None
-
-
-                    for tentativa in range(10):
-
-                        try:
-
-                            campo_pix = page.locator(
-                                "#text_copiar"
-                            )
-
-                            if await campo_pix.count() > 0:
-
-                                try:
-
-                                    valor_pix = (
-                                        await campo_pix.input_value()
-                                    )
-
-                                except Exception:
-
-                                    valor_pix = ""
-
-                                if valor_pix:
-
-                                    pix = valor_pix
-
-                                    log(
-                                        tag,
-                                        "🎉 PIX copia e cola capturado!"
-                                    )
-
-                                    break
-
-                        except Exception:
-
-                            pass
-                        
-                        try:
-
-                            botao_copia = page.locator(
-                                "#pix-copia-cola"
-                            )
-
-                            if await botao_copia.count() > 0:
-
-                                if await botao_copia.is_visible():
-
-                                    log(
-                                        tag,
-                                        f"📋 Tentativa "
-                                        f"{tentativa + 1}/10: "
-                                        f"abrindo PIX copia e cola..."
-                                    )
-
-                                    await botao_copia.click()
-
-                        except Exception:
-
-                            pass
-
-
-                        await asyncio.sleep(1)
-
-                    if pix:
-
-                        log(
-                            tag,
-                            "========================================"
-                        )
-
-                        log(
-                            tag,
-                            "🎉 PIX COPIA E COLA ENCONTRADO!"
-                        )
-
-                        log(
-                            tag,
-                            f"📋 {pix}"
-                        )
-
-                        log(
-                            tag,
-                            "========================================"
-                        )
-
-
                     fim_bot = datetime.now()
 
                     tempo_total = (
@@ -618,7 +380,7 @@ async def rodar_bot(browser,
         await asyncio.sleep(1800)
 
     except Exception as erro_sessao:
-        log(tag,"⚠️ A sessão sofreu uma interrupção: {erro_sessao}")
+        log(tag, f"⚠️ A sessão sofreu uma interrupção: {erro_sessao}")
 
 
 async def main():
@@ -737,11 +499,37 @@ async def main():
         }
 
 
-    for conta in contas_selecionadas:
+    print("\n========================================")
+    print("           SELEÇÃO DE SETORES")
+    print("========================================")
+    print("1 - Procurar somente NORTE")
+    print("2 - Procurar somente SUL")
+    print("3 - Procurar NORTE E SUL")
+    print("========================================")
 
-        conta[
-            "termo_busca_jogo"
-        ] = novo_termo
+    while True:
+        opcao_setor = input(
+            "\n🎯 Escolha o setor (1, 2 ou 3): "
+        ).strip()
+
+        if opcao_setor == "1":
+            setores_escolhidos = ["norte"]
+            break
+
+        elif opcao_setor == "2":
+            setores_escolhidos = ["sul"]
+            break
+
+        elif opcao_setor == "3":
+            setores_escolhidos = ["norte", "sul"]
+            break
+
+        else:
+            print("❌ Opção inválida. Digite 1, 2 ou 3.")
+
+    for conta in contas_selecionadas:
+        conta["termo_busca_jogo"] = novo_termo
+        conta["setores_desejados"] = setores_escolhidos.copy()
 
 
     print(
