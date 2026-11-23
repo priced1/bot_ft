@@ -25,14 +25,6 @@ CONTAS = [
         "nome_alvo": "JHONATA SANTANA",
         "id_checkbox": "#id_dependentes_2785123",
    },
-    {
-        "id_conta": "SARA",
-        "usuario": "sarapherys06@gmail.com",
-        "senha": "Sara0609@!",
-        "auth_file": "auth_sara.json",
-        "nome_alvo": "SARA LUCIANO",
-        "id_checkbox": "#id_dependentes_4192490",
-   },
    {
            "id_conta": "ISABELLA",
            "usuario": "508.074.448-04",
