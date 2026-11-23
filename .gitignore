@@ -1,0 +1,21 @@
+# Variáveis de ambiente e credenciais
+.env
+.env.*
+!.env.example
+
+# Sessões e cookies salvos pelo Playwright
+auth_*.json
+
+# Cache e ambientes virtuais Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Arquivos de sistema e IDEs
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
